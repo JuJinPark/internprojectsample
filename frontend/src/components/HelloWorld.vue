@@ -2,8 +2,8 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
-    <h3 v-for="(user,index) in users" :key="user.id">
-      <router-link :to="{ name: 'DetailUser', params: { id: index}}"> {{user.name}} : {{user.phone}} </router-link>
+    <h3 v-for="(user) in users" :key="user.id">
+      <router-link :to="{ name: 'DetailUser', params: { id: user.user_no}}"> {{user.name}} : {{user.phone}} </router-link>
     </h3>
   </div>
 </template>

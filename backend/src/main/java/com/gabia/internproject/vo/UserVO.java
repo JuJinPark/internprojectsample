@@ -9,7 +9,8 @@ public class UserVO {
 
     public UserVO(){}
     public UserVO(String name, String phone) {
-        super();
+
+
         this.name = name;
         this.phone = phone;
     }
