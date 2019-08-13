@@ -9,40 +9,23 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import java.util.ArrayList;
 import java.util.List;
 
 
-public class HiworksUserService implements UserService {
-
-    List<user> userRepository;
-
-    HiworksUserService(){
-        userRepository=new ArrayList<>();
-        userRepository.add(new user(1,"api1","1111"));
-        userRepository.add(new user(2,"api2","2222"));
-        userRepository.add(new user(3,"api3","3333"));
-        userRepository.add(new user(4,"api4","4444"));
-    }
+public class DataBaseUserService implements UserService {
+    @Autowired
+    UserRepository userRepository;
 
     @Override
-
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     public List<user> selectUserList() {
-        return userRepository;
+        return ImmutableList.copyOf(userRepository.findAll());
     }
 
     @Override
-
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     public user selectUser(int id) {
-
-        for(user individual:userRepository){
-            if(individual.getUser_no()==id){
-                return individual;
-            }
-        }
-
-        return new user(0,"없음데이터베이스","");
+        return userRepository.findById(id).orElse(new user(0,"없음","없음"));
     }
 
     @Override
