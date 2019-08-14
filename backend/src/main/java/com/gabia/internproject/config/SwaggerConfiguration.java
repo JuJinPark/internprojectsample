@@ -24,6 +24,6 @@ public class SwaggerConfiguration {
 
     private ApiInfo swaggerInfo() {
         return new ApiInfoBuilder().title("Spring API Documentation")
-                .description("문서관리 프로그램 서버 API에 대한 연동 문서입니다").version("1").build();
+                .description("자리배치 프로그램 API 문서입니다.").version("1").build();
     }
 }

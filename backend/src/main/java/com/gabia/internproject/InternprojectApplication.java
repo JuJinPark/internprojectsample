@@ -27,19 +27,21 @@ public class InternprojectApplication implements CommandLineRunner {
 		SpringApplication.run(InternprojectApplication.class, args);
 
 
-//crossorgin 설정해주기
+
 
 	}
 
-	public void run(String... args) throws Exception{
-		String[] beans = context.getBeanDefinitionNames();
-		Arrays.sort(beans);
-		for (String bean : beans) {
-			System.out.println(bean);
-		}
 
-		System.out.println(context.getBean(HiworksUserService.class));
-		System.out.println(context.getBean(DataBaseUserService.class));
+
+	public void run(String... args) throws Exception{
+//		String[] beans = context.getBeanDefinitionNames();
+//		Arrays.sort(beans);
+//		for (String bean : beans) {
+//			System.out.println(bean);
+//		}
+//
+//		System.out.println(context.getBean(HiworksUserService.class));
+//		System.out.println(context.getBean(DataBaseUserService.class));
 
 	}
 
