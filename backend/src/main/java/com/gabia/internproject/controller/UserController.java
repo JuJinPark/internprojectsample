@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,12 @@ import java.util.List;
 public class UserController {
     @Autowired
     UserService userService;
+
+
+    @RequestMapping("/user")
+    public Principal user(Principal principal) {
+        return principal;
+    }
 
     @GetMapping
     @ApiOperation(value = "사용자 목록 조회", notes = "전체 사용자 목록을 조회하는 API.")
