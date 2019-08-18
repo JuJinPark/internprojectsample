@@ -4,6 +4,7 @@ import com.gabia.internproject.service.ServiceFactory;
 import com.gabia.internproject.service.ServiceType;
 import com.gabia.internproject.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.Collections;
 
 @Configuration
+
 public class SpringConfig {
 
     @Bean
