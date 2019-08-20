@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-//@RequestMapping("/api/users")
+@RequestMapping("/api/users")
 @Api(value = "UserController")
 
 public class UserController {
@@ -33,37 +33,46 @@ public class UserController {
     public UserController(HttpSession httpSession) {
         this.httpSession = httpSession;
     }
-
-    @GetMapping("/me")
-    public Map<String, Object> me(){
-        Map<String, Object> response = new LinkedHashMap<>();
-        response.put("profile", httpSession.getAttribute("LOGIN_USER"));
-        return response;
-    }
-
-    @RequestMapping("/user")
-    public Principal user(Principal principal) {
-
-
-        return principal;
-    }
-
-//    @GetMapping
-//    @ApiOperation(value = "사용자 목록 조회", notes = "전체 사용자 목록을 조회하는 API.")
-//    public ResponseVO<?> getUsers() {
-//        ResponseVO<List<user>> resp = new ResponseVO<>();
-//        System.out.println(userService.getClass()+"---");
-//        resp.setResponse(userService.selectUserList());
-//        return resp;
+//
+//    @GetMapping("/me")
+//    public Map<String, Object> me(){
+//        Map<String, Object> response = new LinkedHashMap<>();
+//        response.put("profile", httpSession.getAttribute("LOGIN_USER"));
+//        return response;
 //    }
 //
-//    @GetMapping("/{id}")
-//    @ApiOperation(value = "사용자 목록 조회", notes = "특정사용자 목록 조회")
-//    public ResponseVO<?> getUser(@PathVariable int id) {
-//        ResponseVO<user> resp = new ResponseVO<>();
-//        System.out.println(userService.getClass()+"-");
-//        resp.setResponse(userService.selectUser(id));
-//        return resp;
+//    @RequestMapping("/user")
+//    public Principal user(Principal principal) {
+//
+//
+//        return principal;
 //    }
+
+    @GetMapping
+    @ApiOperation(value = "사용자 목록 조회", notes = "전체 사용자 목록을 조회하는 API.")
+    public ResponseVO<?> getUsers() {
+        ResponseVO<List<user>> resp = new ResponseVO<>();
+        System.out.println(userService.getClass()+"---");
+//        int id=12;
+//        if(httpSession.getAttribute("id")!=null){
+//             id = (int) httpSession.getAttribute("id");
+//        }
+//
+//
+//        List<user> list=userService.selectUserList();
+//        list.add(new user(id,"세션값","세션값"));
+        resp.setResponse(userService.selectUserList());
+        return resp;
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation(value = "사용자 목록 조회", notes = "특정사용자 목록 조회")
+    public ResponseVO<?> getUser(@PathVariable int id) {
+        ResponseVO<user> resp = new ResponseVO<>();
+//        httpSession.setAttribute("id", id);
+        System.out.println(userService.getClass()+"-");
+        resp.setResponse(userService.selectUser(id));
+        return resp;
+    }
 
 }

@@ -20,6 +20,7 @@ public class DataBaseUserService implements UserService {
     @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     public List<user> selectUserList() {
         return ImmutableList.copyOf(userRepository.findAll());
+        userRepository.
     }
 
     @Override
