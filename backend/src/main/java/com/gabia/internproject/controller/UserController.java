@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/users")
@@ -29,6 +30,7 @@ public class UserController {
 
     private HttpSession httpSession;
     private Object SessionConstants;
+
 
     public UserController(HttpSession httpSession) {
         this.httpSession = httpSession;
@@ -74,5 +76,18 @@ public class UserController {
         resp.setResponse(userService.selectUser(id));
         return resp;
     }
+
+
+
+//
+//    @GetMapping("/{id}")
+//    @ApiOperation(value = "사용자 목록 조회", notes = "특정사용자 목록 조회")
+//    public ResponseVO<?> getUser(@PathVariable int id) {
+//        ResponseVO<user> resp = new ResponseVO<>();
+//        System.out.println(userService.getClass()+"-");
+//        resp.setResponse(userService.selectUser(id));
+//        return resp;
+//    }
+
 
 }
