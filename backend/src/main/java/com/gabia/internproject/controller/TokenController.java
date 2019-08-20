@@ -27,5 +27,7 @@ public class TokenController {
         String token = tokenProvider.createToken(user);
         CookieUtils.addCookie(response,"accesstoken",token,2 * 60 * 60);
         return ResponseEntity.ok(new AuthResponse(token));
+
+
     }
 }
