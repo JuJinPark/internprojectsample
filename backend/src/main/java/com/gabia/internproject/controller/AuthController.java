@@ -11,6 +11,9 @@ import com.github.scribejava.apis.GitHubApi;
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
+import com.github.scribejava.core.model.OAuthRequest;
+import com.github.scribejava.core.model.Response;
+import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth10aService;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import io.swagger.annotations.ApiOperation;
@@ -45,36 +48,43 @@ public class AuthController {
 //
 //        String authUrl = service.getAuthorizationUrl();
 //
-//        OAuth20Service service2=new ServiceBuilder("3d69aa3156aa86f6eb84")
-//                .apiSecret("9b1dc3460068922506d5c27b2d7155bd31f130c8")
-//                .callback("http://localhost:8080/oauth2/callback/github")
-////                .scope("email")
-//              .build(GitHubApi.instance());
-//        String authUrl2 = service2.getAuthorizationUrl();
-//
+        OAuth20Service service2=new ServiceBuilder("3d69aa3156aa86f6eb84")
+                .apiSecret("9b1dc3460068922506d5c27b2d7155bd31f130c8")
+                .callback("http://localhost:8080/oauth2/callback/github")
+//                .scope("email")
+              .build(GitHubApi.instance());
+        String authUrl2 = service2.getAuthorizationUrl();
 
-        OAuthService service= OAuthServiceFactory.getService(serviceProvider);
-        if(service==null){
-            return ResponseEntity.ok(new ApiResponse(false,"service not found"));
-        }
 
-        return ResponseEntity.ok(new ApiResponse(true,service.getAuthorizationUrl()));
+//        OAuthService service= OAuthServiceFactory.getService(serviceProvider);
+//        if(service==null){
+//            return ResponseEntity.ok(new ApiResponse(false,"service not found"));
+//        }
+
+        return ResponseEntity.ok(new ApiResponse(true,service2.getAuthorizationUrl()));
 
 
     }
 
-//    @RequestMapping("/oauth2/callback/{serviceProvider}")
-//    @ApiOperation(value = "인증요청", notes = "인증요청")
-//    public ResponseEntity<?> getToken(@PathVariable String serviceProvider,@RequestParam String code) throws InterruptedException, ExecutionException, IOException {
-//
-//        OAuth2AccessToken accessToken = service.getAccessToken(code);
-//
-//
-//
-//
-//
-//        return ResponseEntity.ok(new ApiResponse(true,accessToken.getAccessToken()));
-//
-//
-//    }
+    @RequestMapping("/oauth2/callback/{serviceProvider}")
+    @ApiOperation(value = "인증요청", notes = "인증요청")
+    public ResponseEntity<?> getToken(@PathVariable String serviceProvider,@RequestParam String code) throws InterruptedException, ExecutionException, IOException {
+        OAuth20Service service=new ServiceBuilder("3d69aa3156aa86f6eb84")
+                .apiSecret("9b1dc3460068922506d5c27b2d7155bd31f130c8")
+                .callback("http://localhost:8080/oauth2/callback/github")
+                .build(GitHubApi.instance());
+
+        OAuth2AccessToken accessToken = service.getAccessToken(code);
+        OAuthRequest request = new OAuthRequest(Verb.GET,
+                "https://api.github.com/user");
+
+        service.signRequest(accessToken,request);
+
+        Response response = service.execute(request);
+
+
+        return ResponseEntity.ok(new ApiResponse(true,response.getBody()+"--"+request.getHeaders()));
+
+
+    }
 }
