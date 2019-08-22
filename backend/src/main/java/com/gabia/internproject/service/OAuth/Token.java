@@ -1,5 +1,6 @@
 package com.gabia.internproject.service.OAuth;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gabia.internproject.util.StringValidationChecker;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -8,13 +9,13 @@ public class Token {
 
 
 
-
+    @JsonProperty("access_token")
         private String accessToken;
-
+    @JsonProperty("token_type")
         private String tokenType;
-
+    @JsonProperty("expires_in")
         private Integer expiresIn;
-
+    @JsonProperty("refresh_token")
         private String refreshToken;
 
         private String scope;
@@ -42,6 +43,9 @@ public class Token {
         public String getAccessToken() {
             return accessToken;
         }
+    public String setAccessToken(String accessToken) {
+        return this.accessToken=accessToken;
+    }
 
         public String getTokenType() {
             return tokenType;

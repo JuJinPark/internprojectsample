@@ -99,7 +99,7 @@ System.out.println(service.getAuthorizationUrl());
 
             System.out.println(url);
 
-            ss=restTemplate.exchange(url,HttpMethod.POST,null,new ParameterizedTypeReference<Token>() {}).getBody();
+       //     ss=restTemplate.exchange(url,HttpMethod.POST,null,new ParameterizedTypeReference<Token>() {}).getBody();
 
         }else if("github".equals(serviceProvider)){
             ParameterList parameters = new ParameterList();
@@ -109,7 +109,7 @@ System.out.println(service.getAuthorizationUrl());
             url=parameters.appendToWithoutEncoding("https://github.com/login/oauth/access_token");
 
 
-            ss=restTemplate.exchange(url,HttpMethod.POST,null,new ParameterizedTypeReference<Token>() {}).getBody();
+      //      ss=restTemplate.exchange(url,HttpMethod.POST,null,new ParameterizedTypeReference<Token>() {}).getBody();
 
 
         }else {
@@ -122,17 +122,18 @@ System.out.println(service.getAuthorizationUrl());
             map.add(OAuthConstants.AUTH_CODE.getText(),code);
             map.add(OAuthConstants.CLIENT_ID.getText(),"f3xor1auc7d45n1zby6uapdggde9lqu65d5dee1e48d234.85217709.open.apps");
             map.add(OAuthConstants.CLIENT_SECRET.getText(),"fpz4zdkdkdi60rp0tf9rp7ivhhvwjl4y");
-            map.add(OAuthConstants.GRANT_TYPE.getText(),"authorization_code");
+                map.add(OAuthConstants.GRANT_TYPE.getText(),"authorization_code");
             map.add(OAuthConstants.ACCESS_TYPE.getText(),"offline");
 
             HttpEntity<?> httpEntity = new HttpEntity<>(map,headers);
 
-            ss=restTemplate.exchange(url,HttpMethod.POST,httpEntity,new ParameterizedTypeReference<Token>() {}).getBody();
+        //  ss=restTemplate.exchange(url,HttpMethod.POST,httpEntity,new ParameterizedTypeReference<Token>() {}).getBody();
         }
         System.out.println(url);
-System.out.println(ss.getAccessToken()+"access_token");
-        System.out.println(ss.getRefreshToken()+"refresh_token");
-        System.out.println(ss.getExpiresIn()+"exprie_time");
+//System.out.println(ss.getAccessToken()+"access_token");
+//        System.out.println(ss.getRefreshToken()+"refresh_token");
+//        System.out.println(ss.getExpiresIn()+"exprie_time");
+//        System.out.println(ss.getScope()+"exprie_time");
 
 
 //        OAuthRequest request = new OAuthRequest(Verb.GET,
