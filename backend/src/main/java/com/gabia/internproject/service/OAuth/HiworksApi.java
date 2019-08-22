@@ -18,6 +18,6 @@ public class HiworksApi extends ApiProvider {
 
     @Override
     public String getAuthorizationBaseUrl() {
-        return "https://accounts.google.com/o/oauth2/auth";
+        return "https://api.hiworks.com/open/auth/authform";
     }
 }

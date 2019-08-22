@@ -45,6 +45,17 @@ public class ParameterList {
                     + queryString;
         }
     }
+    public String appendToWithoutEncoding(String url) throws UnsupportedEncodingException {
+        StringValidationChecker.checkNotNull(url, "Cannot append to null URL");
+        final String queryString = asFormUrlNormalString();
+        if (queryString.equals(EMPTY_STRING)) {
+            return url;
+        } else {
+            return url
+                    + (url.indexOf(QUERY_STRING_SEPARATOR) == -1 ? QUERY_STRING_SEPARATOR : PARAM_SEPARATOR)
+                    + queryString;
+        }
+    }
 
     public String asFormUrlEncodedString() throws UnsupportedEncodingException {
         if (params.isEmpty()) {
@@ -54,6 +65,19 @@ public class ParameterList {
         final StringBuilder builder = new StringBuilder();
         for (Parameter p : params) {
             builder.append(PARAM_SEPARATOR).append(p.asUrlEncodedPair());
+        }
+
+        return builder.substring(1);
+    }
+
+    public String asFormUrlNormalString() throws UnsupportedEncodingException {
+        if (params.isEmpty()) {
+            return EMPTY_STRING;
+        }
+
+        final StringBuilder builder = new StringBuilder();
+        for (Parameter p : params) {
+            builder.append(PARAM_SEPARATOR).append(p.asUrlPair());
         }
 
         return builder.substring(1);

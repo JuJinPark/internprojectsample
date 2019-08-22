@@ -18,6 +18,12 @@ public class Parameter {
 
 
     }
+    public String asUrlPair() throws UnsupportedEncodingException {
+
+        return key.concat("=").concat(value);
+
+
+    }
 
     public String getKey() {
         return key;

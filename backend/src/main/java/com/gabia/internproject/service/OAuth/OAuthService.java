@@ -1,6 +1,7 @@
 package com.gabia.internproject.service.OAuth;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class OAuthService {
@@ -21,7 +22,7 @@ public class OAuthService {
         private  String scope;
         private  String responseType = "code";
         private  ApiProvider ApiProvider;
-        private  Map<String, String> additionalParams;
+        private  Map<String, String> additionalParams= new HashMap<>();
 
         public Builder(String apiKey) {
             this.apiKey = apiKey;
@@ -49,8 +50,9 @@ public class OAuthService {
             this.ApiProvider = ApiProvider;
             return this;
         }
-        public Builder additionalParams(Map<String, String> additionalParams) {
-            this.additionalParams = additionalParams;
+        public Builder additionalParams(String key,String value) {
+
+            this.additionalParams.put(key,value);
             return this;
         }
         public OAuthService build() {

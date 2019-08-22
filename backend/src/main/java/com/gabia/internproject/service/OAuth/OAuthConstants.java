@@ -15,7 +15,9 @@ public enum OAuthConstants {
      PASSWORD ("password"),
      RESPONSE_TYPE ("response_type"),
      RESPONSE_TYPE_CODE ("code"),
-     SCOPE ("scope");
+     SCOPE ("scope"),
+     ACCESS_TYPE ("access_type"),
+    AUTH_CODE ("auth_code");
 
     private String text;
 
