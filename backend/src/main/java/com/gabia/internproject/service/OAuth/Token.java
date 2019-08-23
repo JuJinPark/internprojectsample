@@ -1,10 +1,11 @@
 package com.gabia.internproject.service.OAuth;
 
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gabia.internproject.util.StringValidationChecker;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class Token {
 
 
@@ -43,7 +44,8 @@ public class Token {
         public String getAccessToken() {
             return accessToken;
         }
-    public String setAccessToken(String accessToken) {
+
+        public String setAccessToken(String accessToken) {
         return this.accessToken=accessToken;
     }
 

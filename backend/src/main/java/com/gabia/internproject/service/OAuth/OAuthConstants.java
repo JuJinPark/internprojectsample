@@ -17,7 +17,14 @@ public enum OAuthConstants {
      RESPONSE_TYPE_CODE ("code"),
      SCOPE ("scope"),
      ACCESS_TYPE ("access_type"),
-    AUTH_CODE ("auth_code");
+    AUTH_CODE ("auth_code"),
+    PROMPT ("prompt"),
+
+     //HTTP headers
+
+    CONTENT_TYPE("Content-Type");
+
+
 
     private String text;
 

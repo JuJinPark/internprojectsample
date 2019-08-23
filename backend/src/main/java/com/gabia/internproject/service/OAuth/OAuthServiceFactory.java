@@ -7,6 +7,7 @@ public class OAuthServiceFactory {
                    .apiSecret("6RBgEZXwPTXijKHmvgqfKGDo")
                    .callback("http://localhost:8080/login/callback/google")
                    .additionalParams("access_type","offline")
+                   .additionalParams("prompt","consent")
                    .scope("email")
                    .apiProvider(GoogleApi.instance())
                    .build();

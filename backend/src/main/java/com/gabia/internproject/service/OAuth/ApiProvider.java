@@ -1,16 +1,22 @@
 package com.gabia.internproject.service.OAuth;
 
+import org.springframework.http.HttpMethod;
+
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 public abstract class ApiProvider {
-
-    public abstract String getAccessTokenEndpoint();
     public String getRefreshTokenEndpoint() {
         return getAccessTokenEndpoint();
     }
 
-    public abstract String getAuthorizationBaseUrl();
+    public HttpMethod getAccessTokenVerb() {
+        return HttpMethod.POST;
+    }
+
+
+
+
     public String getAuthorizationUrl(String responseType, String apiKey, String callback, String scope, String state,
                                       Map<String, String> additionalParams) throws UnsupportedEncodingException {
         final ParameterList parameters = new ParameterList(additionalParams);
@@ -31,5 +37,17 @@ public abstract class ApiProvider {
 
         return parameters.appendTo(getAuthorizationBaseUrl());
     }
+
+    public abstract String getAccessTokenEndpoint();
+    public abstract String getAuthorizationBaseUrl();
+    public abstract OAuthConstants getAuthCodeParameterName();
+
+
+    public abstract OAuthConstants[] getRequiredHeadersForAccessToken();
+    public abstract OAuthConstants[] getRequiredParametersForAccessToken();
+    public abstract OAuthConstants[] getRequiredBodyParametersForAccessToken();
+    public abstract Map<OAuthConstants,String> getDefaultValue();
+    public abstract void setDefaultValue(OAuthConstants key,String value);
+
 
 }
