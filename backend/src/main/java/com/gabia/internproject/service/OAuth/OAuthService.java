@@ -2,10 +2,19 @@ package com.gabia.internproject.service.OAuth;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.HttpMethod;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+import javax.net.ssl.SSLContext;
 import java.io.UnsupportedEncodingException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +28,7 @@ public class OAuthService {
     private final Map<String, String> additionalParams;
     private final Map<OAuthConstants, String> keyParmas=new HashMap<>();
 
+
     public static class Builder {
 
         private final String apiKey;
@@ -27,7 +37,7 @@ public class OAuthService {
         private  String callback;
         private  String scope;
         private  String responseType = "code";
-        private  ApiProvider apiProvider;
+        private ApiProvider apiProvider;
         private  Map<String, String> additionalParams= new HashMap<>();
 
         public Builder(String apiKey) {
@@ -105,22 +115,44 @@ public class OAuthService {
     }
     public Map<String, String> getAdditionalParams(){return additionalParams; }
 
-    public Token getAccessToken(String code) throws UnsupportedEncodingException {
+    public Token getAccessToken(String code) throws UnsupportedEncodingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 
         OAuthRequest request = createAccessTokenRequest(code);
         return sendAccessTokenRequest(request);
     }
 
-    private Token sendAccessTokenRequest(OAuthRequest request) {
+    private Token sendAccessTokenRequest(OAuthRequest request) throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
 
-        RestTemplate restTemplate = new RestTemplate();
-
+        RestTemplate restTemplate = new RestTemplate(skipSSSLValidation());
         Map<String,Object> response=restTemplate.exchange(request.getUrl(),request.getMethod(),request.getHttpEntity(),Map.class).getBody();
         return convertMaptoToken(response);
 
     }
 
+    private HttpComponentsClientHttpRequestFactory skipSSSLValidation() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
+        TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
+
+        SSLContext sslContext = org.apache.http.ssl.SSLContexts.custom()
+                .loadTrustMaterial(null, acceptingTrustStrategy)
+                .build();
+
+        SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext);
+
+        CloseableHttpClient httpClient = HttpClients.custom()
+                .setSSLSocketFactory(csf)
+                .build();
+
+        HttpComponentsClientHttpRequestFactory requestFactory =
+                new HttpComponentsClientHttpRequestFactory();
+
+        requestFactory.setHttpClient(httpClient);
+
+        return requestFactory;
+
+    }
+
     private Token convertMaptoToken(Map response){
+
         if(response.get("access_token")==null){
             response=(Map<String,Object>)response.get("data");
         }
@@ -153,9 +185,6 @@ public class OAuthService {
         return apiProvider.getAuthorizationUrl(getResponseType(), getApiKey(), getCallback(), getScope(), state, getAdditionalParams());
     }
 
-//    public String getAuthorizationUrl(Map<String, String> additionalParams) throws UnsupportedEncodingException {
-//
-//        return getAuthorizationUrl(null,additionalParams);
-//    }
+
 
 }

@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gabia.internproject.util.StringValidationChecker;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
 
-public class Token {
+
+public class Token implements Serializable {
 
 
 
@@ -48,6 +50,10 @@ public class Token {
         public String setAccessToken(String accessToken) {
         return this.accessToken=accessToken;
     }
+
+        public void setScope(String scope){
+            this.scope=scope;
+        }
 
         public String getTokenType() {
             return tokenType;

@@ -1,6 +1,7 @@
 package com.gabia.internproject.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gabia.internproject.data.entity.user;
 import com.gabia.internproject.payload.ApiResponse;
@@ -21,19 +22,33 @@ import io.swagger.annotations.ApiOperation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+
 import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.net.ssl.SSLContext;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 @RestController
 public class AuthController {
@@ -78,15 +93,15 @@ System.out.println(service.getAuthorizationUrl());
 
     @GetMapping(value = {"/login/callback/{serviceProvider}"},params = {"code"})
     @ApiOperation(value = "인증요청", notes = "인증요청")
-    public ResponseEntity<?> apiDefaultCallback(@PathVariable String serviceProvider,@RequestParam String code) throws InterruptedException, ExecutionException, IOException {
+    public ResponseEntity<?> apiDefaultCallback(HttpSession session, @PathVariable String serviceProvider, @RequestParam String code) throws InterruptedException, ExecutionException, IOException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
 //        OAuth20Service service=new ServiceBuilder("3d69aa3156aa86f6eb84")
 //                .apiSecret("9b1dc3460068922506d5c27b2d7155bd31f130c8")
 //                .callback("http://localhost:8080/oauth2/callback/github")
 //                .build(GitHubApi.instance());
-//
-////        OAuthService service= OAuthServiceFactory.getService(serviceProvider);
+
+//        OAuthService service= OAuthServiceFactory.getService(serviceProvider);
 //       OAuth2AccessToken accessToken = service.getAccessToken(code);
-//
+
 //        RestTemplate restTemplate = new RestTemplate();
 //
 //
@@ -108,7 +123,7 @@ System.out.println(service.getAuthorizationUrl());
 //            HttpHeaders headers = new HttpHeaders();
 //            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 //            HttpEntity<?> httpEntity = new HttpEntity<>(headers);
-//           ss=restTemplate.exchange(url,HttpMethod.POST,httpEntity,Map.class).getBody();
+//           ss=restTemplate.exchange(url, HttpMethod.POST,httpEntity,Map.class).getBody();
 //
 //        }else if("github".equals(serviceProvider)){
 //            ParameterList parameters = new ParameterList();
@@ -125,8 +140,9 @@ System.out.println(service.getAuthorizationUrl());
 //        }else {
 //            url="https://api.hiworks.com/open/auth/accesstoken";
 //
-        HttpHeaders headers = new HttpHeaders();
-           headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+//           headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 //
 //
 //            MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
@@ -139,6 +155,23 @@ System.out.println(service.getAuthorizationUrl());
 //            HttpEntity<?> httpEntity = new HttpEntity<>(map,headers);
 //
 //
+//            TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
+//
+//            SSLContext sslContext = org.apache.http.ssl.SSLContexts.custom()
+//                    .loadTrustMaterial(null, acceptingTrustStrategy)
+//                    .build();
+//
+//            SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext);
+//
+//            CloseableHttpClient httpClient = HttpClients.custom()
+//                    .setSSLSocketFactory(csf)
+//                    .build();
+//
+//            HttpComponentsClientHttpRequestFactory requestFactory =
+//                    new HttpComponentsClientHttpRequestFactory();
+//
+//            requestFactory.setHttpClient(httpClient);
+//       restTemplate = new RestTemplate(requestFactory);
 //        ss=restTemplate.exchange(url,HttpMethod.POST,httpEntity,Map.class).getBody();
 //        }
 //
@@ -147,21 +180,39 @@ System.out.println(service.getAuthorizationUrl());
 //
 //            ss=(Map<String,String>)ss.get("data");
 //        }
-//
-//        ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
-//      Token token = mapper.convertValue(ss, Token.class);
-//
-
-
-       Token token= service.getAccessToken(code);
 
 //
-//System.out.println(token.getAccessToken()+"access_token");
+//        ObjectMapper mapper =  new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // jackson's objectmapper
+//        Token token = mapper.convertValue(ss, Token.class);
+
+
+Date date=new Date();
+        SimpleDateFormat dayTime=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String time=dayTime.format(date);
+
+        Token token;
+if(session.getAttribute("usertoken")==null){
+     token= service.getAccessToken(code);
+    if(token!=null){
+        token.setScope(time);
+        session.setAttribute("usertoken",token);
+    }
+
+
+}else{
+     token= (Token) session.getAttribute("usertoken");
+
+}
+
+
+
+
+//        System.out.println(token.getAccessToken()+"access_token");
 //        System.out.println(token.getRefreshToken()+"refresh_token");
 //        System.out.println(token.getExpiresIn()+"exprie_time");
 //        System.out.println(token.getScope()+"scope");
 
-
+//
 //        OAuthRequest request = new OAuthRequest(Verb.GET,
 //                "https://api.github.com/user");
 //
@@ -176,9 +227,9 @@ System.out.println(service.getAuthorizationUrl());
     }
     @GetMapping(value = {"/login/callback/{serviceProvider}"},params = {"auth_code"})
     @ApiOperation(value = "하이웍스 콜백", notes = "code 파라미터가 하이웍스만 다르다")
-    public ResponseEntity<?> otherApiCallback(@PathVariable String serviceProvider,@RequestParam String auth_code) throws InterruptedException, ExecutionException, IOException {
+    public ResponseEntity<?> otherApiCallback(HttpSession session,@PathVariable String serviceProvider,@RequestParam String auth_code) throws InterruptedException, ExecutionException, IOException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 
-       return apiDefaultCallback(serviceProvider,auth_code);
+       return apiDefaultCallback(session,serviceProvider,auth_code);
 
     }
 }

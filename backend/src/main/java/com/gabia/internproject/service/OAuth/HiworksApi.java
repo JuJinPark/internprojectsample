@@ -36,7 +36,7 @@ public class HiworksApi extends ApiProvider {
     }
     @Override
     public String getAccessTokenEndpoint() {
-        return "https://api.hiworks.com/open/auth/authform";
+        return "https://api.hiworks.com/open/auth/accesstoken";
     }
 
     @Override
