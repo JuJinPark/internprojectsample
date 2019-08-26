@@ -1,36 +1,17 @@
 package com.gabia.internproject.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gabia.internproject.data.entity.user;
-import com.gabia.internproject.payload.ApiResponse;
-import com.gabia.internproject.payload.AuthResponse;
 import com.gabia.internproject.service.OAuth.*;
-import com.gabia.internproject.util.CookieUtils;
-import com.gabia.internproject.util.TokenProvider;
-import com.github.scribejava.apis.GitHubApi;
-import com.github.scribejava.apis.GoogleApi20;
-import com.github.scribejava.core.builder.ServiceBuilder;
-import com.github.scribejava.core.model.OAuth2AccessToken;
-import com.github.scribejava.core.model.OAuthRequest;
-import com.github.scribejava.core.model.Response;
-import com.github.scribejava.core.model.Verb;
-import com.github.scribejava.core.oauth.OAuth10aService;
-import com.github.scribejava.core.oauth.OAuth20Service;
+//import com.gabia.internproject.service.OAuth.redis.TokenRedisRepository;
 import io.swagger.annotations.ApiOperation;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
 
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.*;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import javax.net.ssl.SSLContext;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -38,22 +19,22 @@ import java.io.UnsupportedEncodingException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 
 import java.util.Date;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustStrategy;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 
 @RestController
 public class AuthController {
 
     OAuthService service;
+
+//    @Autowired
+//    private TokenRedisRepository tokenRedisRepository;
+//    @Autowired
+//    private RedisTemplate<String, Object> redisTemplate;
+    @Resource(name="redisTemplate")
+    private ValueOperations<String, Object> values;
 
     @RequestMapping("/login/{serviceProvider}")
     @ApiOperation(value = "인증요청", notes = "인증요청")
@@ -186,23 +167,7 @@ System.out.println(service.getAuthorizationUrl());
 //        Token token = mapper.convertValue(ss, Token.class);
 
 
-Date date=new Date();
-        SimpleDateFormat dayTime=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String time=dayTime.format(date);
 
-        Token token;
-if(session.getAttribute("usertoken")==null){
-     token= service.getAccessToken(code);
-    if(token!=null){
-        token.setScope(time);
-        session.setAttribute("usertoken",token);
-    }
-
-
-}else{
-     token= (Token) session.getAttribute("usertoken");
-
-}
 
 
 
@@ -220,6 +185,8 @@ if(session.getAttribute("usertoken")==null){
 //
 //        Response response = service.execute(request);
 
+       //Token2 token=redisRepositoryTestservice();
+       Token token= redisTemplateTest(code);
 
         return ResponseEntity.ok(token);
 
@@ -232,4 +199,51 @@ if(session.getAttribute("usertoken")==null){
        return apiDefaultCallback(session,serviceProvider,auth_code);
 
     }
+
+
+//    public Token2 redisRepositoryTestservice(String code){
+//        Date date=new Date();
+//        SimpleDateFormat dayTime=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+//        String time=dayTime.format(date);
+//
+//        Token2 token=tokenRedisRepository.findById("512").orElse(null);
+//
+//        if(token==null){
+//            token= service.getAccessToken(code);
+//            if(token!=null){
+//                token.setScope(time);
+//                token.setExpiresIn(512);
+//                tokenRedisRepository.save(token);
+//
+//            }
+//
+//
+//        }
+//        return token;
+//    }
+
+    public Token redisTemplateTest(String code) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, UnsupportedEncodingException {
+
+        Date date=new Date();
+        SimpleDateFormat dayTime=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String time=dayTime.format(date);
+
+
+
+        Token token= (Token) values.get("518");
+
+        if(token==null){
+            token= service.getAccessToken(code);
+            if(token!=null){
+                token.setScope(time);
+                values.set("518",token);
+
+
+            }
+
+
+        }
+        return token;
+    }
+
 }

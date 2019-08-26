@@ -3,11 +3,13 @@ package com.gabia.internproject.service.OAuth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gabia.internproject.util.StringValidationChecker;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 
-
-public class Token implements Serializable {
+@RedisHash("token")
+public class Token2 implements Serializable {
 
 
 
@@ -15,23 +17,26 @@ public class Token implements Serializable {
         private String accessToken;
     @JsonProperty("token_type")
         private String tokenType;
+    @Id
     @JsonProperty("expires_in")
         private Integer expiresIn;
     @JsonProperty("refresh_token")
         private String refreshToken;
 
+
+
         private String scope;
 
-        public Token(String accessToken) {
+        public Token2(String accessToken) {
             this(accessToken, null);
         }
 
-        public Token(String accessToken, String rawResponse) {
+        public Token2(String accessToken, String rawResponse) {
             this(accessToken, null, null, null, null, rawResponse);
         }
 
-        public Token(String accessToken, String tokenType, Integer expiresIn, String refreshToken, String scope,
-                     String rawResponse) {
+        public Token2(String accessToken, String tokenType, Integer expiresIn, String refreshToken, String scope,
+                      String rawResponse) {
 
             StringValidationChecker.checkNotNull(accessToken, "access_token can't be null");
             this.accessToken = accessToken;
@@ -40,7 +45,7 @@ public class Token implements Serializable {
             this.refreshToken = refreshToken;
             this.scope = scope;
         }
-        public Token(){};
+        public Token2(){};
 
         public String getAccessToken() {
             return accessToken;
@@ -53,6 +58,7 @@ public class Token implements Serializable {
         public void setScope(String scope){
             this.scope=scope;
         }
+        public void setExpiresIn(Integer expiresIn) {this.expiresIn=expiresIn;}
 
         public String getTokenType() {
             return tokenType;
