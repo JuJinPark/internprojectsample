@@ -2,10 +2,16 @@ spring:
   jackson:
       serialization:
         WRITE_DATES_AS_TIMESTAMPS: false
+  datasource:
+    username: intern
+    password: Gabia43701!!
+    url: jdbc:mysql://seat_mysql:3306/intern?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf-8
+    driverClassName: com.mysql.cj.jdbc.Driver
+
   jpa:
-    database: h2
+    database: MYSQL
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate.format_sql: true
@@ -50,3 +56,8 @@ server:
     key-store-password: cheese
     keyStoreType: PKCS12
     keyAlias: tomcat
+
+
+  redis:
+    host:localhost
+    port:6379

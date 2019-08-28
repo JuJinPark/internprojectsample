@@ -2,12 +2,13 @@ package oauth2.social.demo.user;
 
 import lombok.AllArgsConstructor;
 import oauth2.social.demo.social.userconnection.UserConnection;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
 public class UserService {
-
+    @Autowired
     private final UserRepository userRepository;
 
     public User signUp(UserConnection userConnection) {
