@@ -11,7 +11,7 @@ spring:
   jpa:
     database: MYSQL
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate.format_sql: true
@@ -37,6 +37,15 @@ logging:
 #  resource:
 #    userInfoUri: https://graph.facebook.com/me?fields=id, name, email, picture
 
+hiworks :
+  client :
+    clientId : f3xor1auc7d45n1zby6uapdggde9lqu65d5dee1e48d234.85217709.open.apps
+    clientSecret: fpz4zdkdkdi60rp0tf9rp7ivhhvwjl4y
+    accessTokenUri: https://api.hiworks.com/open/auth/accesstoken
+    userAuthorizationUri: https://api.hiworks.com/open/auth/authform?access_type=offline
+  resource:
+    userInfoUri: https://api.hiworks.com/user/v2/me
+
 google :
   client :
     clientId : 898505969152-hkcf91qo3gkj0jfjtshni5duqbe0uqc0.apps.googleusercontent.com
@@ -49,7 +58,11 @@ google :
     - profile
   resource:
     userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
-
+#
+#security :
+#  oauth2 :
+#    client :
+#      useCurrentUri : false
 server:
   ssl:
     key-store: keystore.p12

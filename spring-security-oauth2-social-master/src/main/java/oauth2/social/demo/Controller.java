@@ -13,4 +13,10 @@ public class Controller {
     public Principal home(Principal principal) {
         return principal;
     }
+
+    @RequestMapping(value = "/login/callback/google", method = RequestMethod.GET)
+    public void ss(Principal principal) {
+
+        System.out.println("ss");
+    }
 }
