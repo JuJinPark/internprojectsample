@@ -43,6 +43,7 @@ hiworks :
     clientSecret: fpz4zdkdkdi60rp0tf9rp7ivhhvwjl4y
     accessTokenUri: https://api.hiworks.com/open/auth/accesstoken
     userAuthorizationUri: https://api.hiworks.com/open/auth/authform?access_type=offline
+    redirectUriTemplate: "http://localhost:8080/oauth2/callback/hiworks"
   resource:
     userInfoUri: https://api.hiworks.com/user/v2/me
 
@@ -52,7 +53,9 @@ google :
     clientSecret: 6RBgEZXwPTXijKHmvgqfKGDo
     accessTokenUri: https://www.googleapis.com/oauth2/v4/token
     userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+    authenticationScheme: query
     clientAuthenticationScheme: form
+    redirectUriTemplate: "http://localhost:8080/oauth2/callback/google"
     scope:
     - email
     - profile
@@ -63,13 +66,13 @@ google :
 #  oauth2 :
 #    client :
 #      useCurrentUri : false
-server:
-  ssl:
-    key-store: keystore.p12
-    key-store-password: cheese
-    keyStoreType: PKCS12
-    keyAlias: tomcat
-
+#server:
+#  ssl:
+#    key-store: keystore.p12
+#    key-store-password: cheese
+#    keyStoreType: PKCS12
+#    keyAlias: tomcat
+#
 
   redis:
     host:localhost

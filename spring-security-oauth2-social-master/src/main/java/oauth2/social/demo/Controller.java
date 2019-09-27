@@ -1,5 +1,6 @@
 package oauth2.social.demo;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,9 +15,15 @@ public class Controller {
         return principal;
     }
 
-    @RequestMapping(value = "/login/callback/google", method = RequestMethod.GET)
-    public void ss(Principal principal) {
+    @RequestMapping(value = "/login/callback/{apiProvider}", method = RequestMethod.GET)
+    public String ss(Principal principal,@PathVariable String apiProvider) {
 
-        System.out.println("ss");
+       return apiProvider;
+    }
+
+    @RequestMapping(value = "/success", method = RequestMethod.GET)
+    public String ss(Principal principal) {
+
+        return "접속가능";
     }
 }

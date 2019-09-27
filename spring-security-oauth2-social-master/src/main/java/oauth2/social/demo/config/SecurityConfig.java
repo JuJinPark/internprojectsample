@@ -101,12 +101,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private Filter ssoFilter(ClientResources client, OAuth2ClientAuthenticationProcessingFilter filter,String redirect) {
-        filter.setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler() {
-            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                this.setDefaultTargetUrl(redirect);
-                super.onAuthenticationSuccess(request, response, authentication);
-            }
-        });
+//        filter.setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler() {
+//            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+//                this.setDefaultTargetUrl(redirect);
+//                super.onAuthenticationSuccess(request, response, authentication);
+//            }
+//        });
         OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(client.getClient(), oauth2ClientContext);
 
         filter.setRestTemplate(restTemplate);

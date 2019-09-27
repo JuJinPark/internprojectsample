@@ -28,7 +28,7 @@ public class HiworksOAuth2ClientAuthenticationProcessingFilter extends OAuth2Cli
     private SocialService socialService;
 
     public HiworksOAuth2ClientAuthenticationProcessingFilter(SocialService socialService) {
-        super("/login/hiworks");
+        super("/login/callback/hiworks");
         this.socialService = socialService;
     }
 
@@ -53,7 +53,7 @@ public class HiworksOAuth2ClientAuthenticationProcessingFilter extends OAuth2Cli
 //        private UsernamePasswordAuthenticationToken setAuthenticationToken(Object user) {
 //            return new UsernamePasswordAuthenticationToken(user, null, getAuthorities("ROLE_USER"));
 //        }
-        final UsernamePasswordAuthenticationToken authenticationToken=  new UsernamePasswordAuthenticationToken("s", null, authorities);
+        final UsernamePasswordAuthenticationToken authenticationToken=  new UsernamePasswordAuthenticationToken(details, null, authorities);
 
 
         super.successfulAuthentication(request, response, chain, authenticationToken);
